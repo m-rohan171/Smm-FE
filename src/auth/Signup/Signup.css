@@ -1,0 +1,23 @@
+.signup-card {
+  width: 600px;
+  /* background-color: rgb(97, 85, 197); */
+  padding: 10;
+  border-radius: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* @media screen and (max-width: 880px) {
+  .service-card {
+    width: 500px;
+  
+  }
+}
+@media screen and (max-width: 780px) {
+  .service-card {
+    width: 400px;
+  }
+}
+@media screen and (max-width: 680px) {
+  .service-card {
+    width: 350px;
+  }
+} */

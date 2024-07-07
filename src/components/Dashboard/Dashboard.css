@@ -1,0 +1,25 @@
+.dashboard-layout {
+  background-color: #e5e5e5 !important;
+  height: 100%;
+  width: 100%;
+  padding-top: 10px;
+}
+.site-layout {
+  height: calc(100vh - 64px);
+  overflow: auto;
+}
+.layout {
+  display: flex;
+  width: 100%;
+}
+.ant-layout-sider {
+  min-height: 450px;
+  margin-left: 42px;
+  background-color: transparent !important;
+}
+.ant-layout-sider-trigger {
+  display: none;
+}
+.ant-layout-sider .ant-menu {
+  border-radius: 12px;
+}
