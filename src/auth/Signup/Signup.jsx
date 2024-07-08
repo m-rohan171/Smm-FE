@@ -9,16 +9,16 @@ export const Signup = () => {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    const dataToSend = {
-      ...values,
-      isAdmin: false,
-    };
+    // const dataToSend = {
+    //   ...values,
+    //   isAdmin: false,
+    // };
 
-    const response = await axios.post(`${BaseUrl}/auth/register`, {
-      data: dataToSend,
-    });
-    console.log("response", response);
-    // navigate("/login");
+    // const response = await axios.post(`${BaseUrl}/auth/register`, {
+    //   data: dataToSend,
+    // });
+    // console.log("response", response);
+    navigate("/login");
   };
 
   return (

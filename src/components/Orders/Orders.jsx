@@ -1,12 +1,19 @@
 import { Alert } from "antd";
 import { Button, ConfigProvider, Space } from "antd";
 import { TinyColor } from "@ctrl/tinycolor";
+import { useNavigate } from "react-router-dom";
 export const Order = () => {
+  const navigate = useNavigate();
+
   const colors1 = ["#6253E1", "#04BEFE"];
   const getHoverColors = (colors) =>
     colors.map((color) => new TinyColor(color).lighten(5).toString());
   const getActiveColors = (colors) =>
     colors.map((color) => new TinyColor(color).darken(5).toString());
+
+  const handleOrder = () => {
+    // navigate("/service");
+  };
   return (
     <div style={{ padding: "20px" }}>
       <div style={{ marginBottom: "20px" }}>
@@ -54,7 +61,7 @@ export const Order = () => {
               },
             }}
           >
-            <Button type="primary" size="large">
+            <Button type="primary" size="large" onClick={handleOrder}>
               Place order now
             </Button>
           </ConfigProvider>
