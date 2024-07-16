@@ -1,1 +1,1 @@
-export const BaseUrl = "http://localhost:5000/dev";
+export const BaseUrl = "https://smmbe-production.up.railway.app/dev";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu, Button, Space } from "antd";
 import {
   AppstoreOutlined,
@@ -15,6 +15,7 @@ import { Overview } from "../Overview/Overview";
 import { Setting } from "../Settings/Settings";
 import { Order } from "../Orders/Orders";
 import { AddFunds } from "../AddFunds/AddFunds";
+import { useNavigate } from "react-router-dom";
 
 const { Header, Content } = Layout;
 
@@ -129,6 +130,13 @@ const items = [
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("Overview");
+  const [token, setToken] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    setToken(savedToken);
+  }, []);
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -138,6 +146,11 @@ const Dashboard = () => {
     setSelectedKey(key);
   };
 
+  const handleLogout = () => {
+    localStorage.setItem("token", "");
+
+    navigate("/login");
+  };
   return (
     <div>
       <Layout className="dashboard">
@@ -160,22 +173,25 @@ const Dashboard = () => {
             <Menu
               theme="dark"
               mode="horizontal"
-              defaultSelectedKeys={["1"]}
+              defaultSelectedKeys={selectedKey}
               style={{ flex: 1 }}
             >
               {/* Add any additional Menu.Items here if needed */}
             </Menu>
             <Space style={{ gap: "20px" }}>
-              {/* <span style={{ color: "white" }}>Login</span>
-              <Button
-                type="primary"
-                style={{
-                  backgroundColor: "rgb(253,206,75)",
-                  color: "rgb(136,115,153)",
-                }}
-              >
-                Sign Up
-              </Button> */}
+              {/* <span style={{ color: "white" }}>Login</span> */}
+              {token && (
+                <Button
+                  onClick={handleLogout}
+                  type="primary"
+                  style={{
+                    backgroundColor: "rgb(253,206,75)",
+                    color: "rgb(136,115,153)",
+                  }}
+                >
+                  Logout
+                </Button>
+              )}
               <img
                 style={{
                   display: "flex",
@@ -194,6 +210,7 @@ const Dashboard = () => {
         >
           <div className="layout" id="main-layout">
             <Sider
+              defaultSelectedKeys={selectedKey}
               collapsible
               collapsed={collapsed}
               onCollapse={toggleCollapsed}
@@ -202,7 +219,7 @@ const Dashboard = () => {
               <Menu
                 theme="light"
                 mode="inline"
-                defaultSelectedKeys={["1"]}
+                defaultSelectedKeys={selectedKey}
                 defaultOpenKeys={["sub1"]}
                 onClick={handleMenuClick}
                 items={items}
@@ -210,23 +227,38 @@ const Dashboard = () => {
             </Sider>
             <Content className="content">
               {selectedKey === "youtube" ? (
-                <ServiceForm service={YouTubeService} />
+                <ServiceForm
+                  service={YouTubeService}
+                  selectedKey={selectedKey}
+                />
               ) : selectedKey === "Overview" ? (
-                <Overview />
+                <Overview setSelectedKey={setSelectedKey} />
               ) : selectedKey === "instagram" ? (
-                <ServiceForm service={InstaService} />
+                <ServiceForm service={InstaService} selectedKey={selectedKey} />
               ) : selectedKey === "tiktok" ? (
-                <ServiceForm service={TiktokService} />
+                <ServiceForm
+                  service={TiktokService}
+                  selectedKey={selectedKey}
+                />
               ) : selectedKey === "facebook" ? (
-                <ServiceForm service={FacebookService} />
+                <ServiceForm
+                  service={FacebookService}
+                  selectedKey={selectedKey}
+                />
               ) : selectedKey === "twiter" ? (
-                <ServiceForm service={TwiterService} />
+                <ServiceForm
+                  service={TwiterService}
+                  selectedKey={selectedKey}
+                />
               ) : selectedKey === "linkedin" ? (
-                <ServiceForm service={LinkedInService} />
+                <ServiceForm
+                  service={LinkedInService}
+                  selectedKey={selectedKey}
+                />
               ) : selectedKey === "setting" ? (
                 <Setting />
               ) : selectedKey === "orders" ? (
-                <Order />
+                <Order setSelectedKey={setSelectedKey} />
               ) : selectedKey === "addfunds" ? (
                 <AddFunds />
               ) : (

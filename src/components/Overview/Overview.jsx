@@ -1,12 +1,20 @@
 import "./Overview.css";
 
-export const Overview = () => {
+export const Overview = ({ setSelectedKey }) => {
+  const handleService = (service) => {
+    setSelectedKey(service);
+  };
   return (
     <div className="overview-main">
       <h2>Welcome, John Smith!</h2>
       <div className="container">
         <div className="card-list">
-          <div className="card">
+          <div
+            onClick={() => {
+              handleService("instagram");
+            }}
+            className="card"
+          >
             <div className="card-body">
               <img
                 className="insta-image"
@@ -16,7 +24,12 @@ export const Overview = () => {
               <p>Instagram</p>
             </div>
           </div>
-          <div className="card">
+          <div
+            onClick={() => {
+              handleService("youtube");
+            }}
+            className="card"
+          >
             <div className="card-body">
               {" "}
               <img
@@ -27,13 +40,23 @@ export const Overview = () => {
               <p>Youtube</p>
             </div>
           </div>
-          <div className="card">
+          <div
+            onClick={() => {
+              handleService("facebook");
+            }}
+            className="card"
+          >
             <div className="card-body">
               <img className="facebook-image" src="logos_facebook.png" alt="" />
               <p>Facebook</p>
             </div>
           </div>
-          <div className="card">
+          <div
+            onClick={() => {
+              handleService("tiktok");
+            }}
+            className="card"
+          >
             <div className="card-body">
               {" "}
               <img
@@ -44,7 +67,12 @@ export const Overview = () => {
               <p>Tiktok</p>
             </div>
           </div>
-          <div className="card">
+          <div
+            onClick={() => {
+              handleService("linkedin");
+            }}
+            className="card"
+          >
             <div className="card-body">
               {" "}
               <img
@@ -55,7 +83,12 @@ export const Overview = () => {
               <p>Linkedin</p>
             </div>
           </div>
-          <div className="card">
+          <div
+            onClick={() => {
+              handleService("twiter");
+            }}
+            className="card"
+          >
             <div className="card-body">
               {" "}
               <img className="twiter-image" src="simple-icons_x.png" alt="" />

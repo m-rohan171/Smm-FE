@@ -1,12 +1,80 @@
 import { Button, Form, Input, Card, Switch } from "antd";
 import "./Setting.css";
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl/BaseUrl";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import { Spinner } from "../../shared/spinner";
+import { useNavigate } from "react-router-dom";
 
 export const Setting = () => {
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   //   console.log({ service });
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Form Values:", values);
+    const token = localStorage.getItem("token");
+    setLoading(true);
+
+    try {
+      const response = await axios.put(`${BaseUrl}/user/profile`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Set the Authorization header
+        },
+      });
+
+      if (response.data.status === 200) {
+        setLoading(false);
+
+        toast.success(response.data.message, {
+          position: "top-center",
+        });
+      } else {
+        console.log("response", response);
+        toast.error(response.data.message, {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.log({ error });
+      toast.error(error.response?.data?.message || "Something went wrong", {
+        position: "top-center",
+      });
+    }
+  };
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    setLoading(true);
+
+    try {
+      const response = await axios.delete(`${BaseUrl}/user/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.status === 200) {
+        setLoading(false);
+        localStorage.removeItem("token");
+
+        toast.success(response.data.message, {
+          position: "top-center",
+        });
+        navigate("/login");
+      } else {
+        console.log("response", response);
+        toast.error(response.data.message, {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.log({ error });
+      toast.error(error.response?.data?.message || "Something went wrong", {
+        position: "top-center",
+      });
+    }
   };
 
   const onChange = (checked) => {
@@ -20,40 +88,38 @@ export const Setting = () => {
           flexDirection: "row",
           justifyContent: "center",
           marginTop: "2rem",
+          position: "relative",
         }}
       >
+        {loading && <Spinner />}
         <Card className="setting-card">
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <h1 style={{ textAlign: "center" }}>Update account information</h1>
             <Form.Item
               label="Full Name"
               name="fullname"
-              rules={[{ required: false, message: "Please select a service" }]}
+              rules={[{ required: true, message: "Please select a service" }]}
             >
               <Input placeholder="Enter Name" />
             </Form.Item>
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: false, message: "Please input the email" }]}
+              rules={[{ required: true, message: "Please input the email" }]}
             >
-              <Input placeholder="Enter emaild" />
+              <Input placeholder="Enter email" />
             </Form.Item>
             <Form.Item
               label="Password"
               name="password"
-              rules={[
-                { required: false, message: "Please input the password" },
-              ]}
+              rules={[{ required: true, message: "Please input the password" }]}
             >
               <Input placeholder="Enter password" />
             </Form.Item>
             <Form.Item
               label="Confirm Password"
               name="confirmpassword"
-              rules={[
-                { required: false, message: "Please input the password" },
-              ]}
+              rules={[{ required: true, message: "Please input the password" }]}
             >
               <Input placeholder="Enter confirm password" />
             </Form.Item>
@@ -62,7 +128,7 @@ export const Setting = () => {
               name="currentpassword"
               rules={[
                 {
-                  required: false,
+                  required: true,
                   message: "Please input the current password",
                 },
               ]}
@@ -113,7 +179,7 @@ export const Setting = () => {
             >
               <div style={{ display: "flex", gap: "10px" }}>
                 <Switch defaultChecked onChange={onChange} />
-                Completed Orders
+                Cancelled Orders
               </div>
             </Form.Item>
             <Form.Item>
@@ -138,7 +204,7 @@ export const Setting = () => {
         }}
       >
         <Card className="setting-card">
-          <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form form={form} layout="vertical">
             <h1 style={{ textAlign: "center" }}>Delete account</h1>
             <Form.Item
               // label="Full Name"
@@ -155,7 +221,8 @@ export const Setting = () => {
               <Button
                 style={{ backgroundColor: "rgb(209,64,35)" }}
                 type="primary"
-                htmlType="submit"
+                // htmlType="submit"
+                onClick={handleDelete}
                 block
               >
                 Delete my account

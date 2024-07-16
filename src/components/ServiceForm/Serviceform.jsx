@@ -1,14 +1,53 @@
 import { Button, Form, Input, Card, Select } from "antd";
 import "./Serviceform.css";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BaseUrl } from "../../BaseUrl/BaseUrl";
+import { useState } from "react";
+import { Spinner } from "../../shared/spinner";
 
 const { Option } = Select;
 
 export const ServiceForm = (service) => {
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   console.log({ service });
 
-  const onFinish = (values) => {
-    console.log("Form Values:", values);
+  const onFinish = async (values) => {
+    const payload = {
+      ...values,
+      platform: service.selectedKey,
+    };
+    setLoading(true);
+    console.log("Form Values:", payload);
+
+    const token = localStorage.getItem("token"); // Retrieve the token from local storage
+
+    try {
+      const response = await axios.post(`${BaseUrl}/orders/create`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Set the Authorization header
+        },
+      });
+
+      if (response.data.status === 200) {
+        setLoading(false);
+
+        toast.success(response.data.message, {
+          position: "top-center",
+        });
+      } else {
+        console.log("response", response);
+        toast.error(response.data.message, {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.log({ error });
+      toast.error(error.response?.data?.message || "Something went wrong", {
+        position: "top-center",
+      });
+    }
   };
 
   return (
@@ -17,8 +56,10 @@ export const ServiceForm = (service) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
+        position: "relative",
       }}
     >
+      {loading && <Spinner />}
       <Card className="service-card">
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <h1 style={{ textAlign: "center" }}>Submit New Order</h1>
@@ -38,7 +79,7 @@ export const ServiceForm = (service) => {
           <Form.Item
             label="Quantity"
             name="quantity" // Add the name prop
-            rules={[{ required: false, message: "Please input the quantity" }]}
+            rules={[{ required: true, message: "Please input the quantity" }]}
           >
             {/* <span>Minimum: 50 • Maximum: 60000</span> */}
             <Input placeholder="Quantity" />
@@ -46,12 +87,8 @@ export const ServiceForm = (service) => {
           <Form.Item
             label="URL"
             name="url" // Add the name prop
-            rules={[{ required: false, message: "Please input the URL" }]}
+            rules={[{ required: true, message: "Please input the URL" }]}
           >
-            {/* <span>
-              Format: https://twitter.com/yourusername/status/tweetid - make
-              sure twitter account is public!
-            </span> */}
             <Input placeholder="URL" />
           </Form.Item>
           <Form.Item>
