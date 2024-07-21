@@ -26,6 +26,9 @@
   width: 100%;
   padding: 15px 30px;
 }
+.card:hover {
+  cursor: pointer;
+}
 .card .card-body {
   display: flex;
   gap: 30px;

@@ -12,16 +12,27 @@ import { Setting } from "./components/Settings/Settings";
 import { ServiceForm } from "./components/ServiceForm/Serviceform";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem("token");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+  console.log({ isAuthenticated });
   return (
     <div className="App">
       <ToastContainer />
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={<Login setIsAuthenticated={setIsAuthenticated} />}
+          />
           <Route path="/signup" element={<Signup />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/service" element={<ServiceForm />} />

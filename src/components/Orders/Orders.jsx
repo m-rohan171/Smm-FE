@@ -1,8 +1,11 @@
 import { Alert } from "antd";
-import { Button, ConfigProvider, Space } from "antd";
+import { Button, ConfigProvider, Modal } from "antd";
 import { TinyColor } from "@ctrl/tinycolor";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Overview } from "../Overview/Overview";
 export const Order = ({ setSelectedKey }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const colors1 = ["#6253E1", "#04BEFE"];
@@ -13,8 +16,14 @@ export const Order = ({ setSelectedKey }) => {
 
   const handleOrder = (orders) => {
     console.log({ orders });
-    setSelectedKey(orders);
+    setIsModalOpen(true);
+    // setSelectedKey(orders);
   };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const isModal = true;
   return (
     <div style={{ padding: "20px" }}>
       <div style={{ marginBottom: "20px" }}>
@@ -74,6 +83,14 @@ export const Order = ({ setSelectedKey }) => {
           </ConfigProvider>
         </div>
       </div>
+      <Modal
+        // title="Service Modal"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Overview isModal={isModal} setSelectedKey={setSelectedKey} />
+      </Modal>
     </div>
   );
 };

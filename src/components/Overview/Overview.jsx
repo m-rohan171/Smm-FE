@@ -1,12 +1,19 @@
+import { useEffect } from "react";
 import "./Overview.css";
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl/BaseUrl";
 
-export const Overview = ({ setSelectedKey }) => {
+export const Overview = ({ setSelectedKey, isModal = false }) => {
+  // useEffect(async () => {
+  //   const response = await axios.get(`${BaseUrl}/user/userprofile`);
+  // }, []);
   const handleService = (service) => {
     setSelectedKey(service);
   };
   return (
     <div className="overview-main">
-      <h2>Welcome, John Smith!</h2>
+      {isModal ? <h2>Select service</h2> : <h2>Welcome, John Smith!</h2>}
+      {/* <h2>Welcome, John Smith!</h2> */}
       <div className="container">
         <div className="card-list">
           <div

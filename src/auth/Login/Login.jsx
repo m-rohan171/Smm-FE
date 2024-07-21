@@ -6,7 +6,7 @@ import axios from "axios";
 import { BaseUrl } from "../../BaseUrl/BaseUrl";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
-export const Login = () => {
+export const Login = ({ setIsAuthenticated }) => {
   const [form] = Form.useForm();
   // console.log({ service });
   const navigate = useNavigate();
@@ -19,9 +19,8 @@ export const Login = () => {
           position: "top-center",
         });
         const token = response?.data?.token;
-
         localStorage.setItem("token", token);
-
+        setIsAuthenticated(true);
         navigate("/");
       } else {
         console.log("response", response);
@@ -32,7 +31,7 @@ export const Login = () => {
     } catch (error) {
       console.log({ error });
       // toast.error(error.response.data.message);
-      toast.error(error.response.data.message, {
+      toast.error(error?.response?.data?.message, {
         position: "top-center",
       });
     }
