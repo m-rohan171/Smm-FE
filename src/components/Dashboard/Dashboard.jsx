@@ -222,6 +222,9 @@ const Dashboard = () => {
                 }}
                 src="Ellipse 1.png"
                 alt="avatar"
+                onClick={() => {
+                  setSelectedKey("setting");
+                }}
               />
             </Space>
           </Header>

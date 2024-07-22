@@ -1,18 +1,41 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./Overview.css";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl/BaseUrl";
 
 export const Overview = ({ setSelectedKey, isModal = false }) => {
-  // useEffect(async () => {
-  //   const response = await axios.get(`${BaseUrl}/user/userprofile`);
-  // }, []);
+  const [userProfile, setUserProfile] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get(`${BaseUrl}/user/userprofile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log({ response });
+        setUserProfile(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  console.log({ userProfile });
+
   const handleService = (service) => {
     setSelectedKey(service);
   };
   return (
     <div className="overview-main">
-      {isModal ? <h2>Select service</h2> : <h2>Welcome, John Smith!</h2>}
+      {isModal ? (
+        <h2>Select service</h2>
+      ) : (
+        <h2>welcome {userProfile?.data?.username}</h2>
+      )}
       {/* <h2>Welcome, John Smith!</h2> */}
       <div className="container">
         <div className="card-list">
